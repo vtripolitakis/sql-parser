@@ -58,6 +58,7 @@ class SelectStatement extends Statement
     public static $OPTIONS = array(
         'ALL' => 1,
         'DISTINCT' => 1,
+        'STREAM' => 1,
         'DISTINCTROW' => 1,
         'HIGH_PRIORITY' => 2,
         'MAX_STATEMENT_TIME' => array(3, 'var='),
