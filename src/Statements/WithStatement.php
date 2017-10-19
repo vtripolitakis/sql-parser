@@ -14,6 +14,9 @@ use PhpMyAdmin\SqlParser\Components\JoinKeyword;
 use PhpMyAdmin\SqlParser\Components\Limit;
 use PhpMyAdmin\SqlParser\Components\OrderKeyword;
 use PhpMyAdmin\SqlParser\Statement;
+use PhpMyAdmin\SqlParser\Parser;
+use PhpMyAdmin\SqlParser\Token;
+use PhpMyAdmin\SqlParser\TokensList;
 
 /**
  * `WITH` statement.
@@ -26,11 +29,40 @@ use PhpMyAdmin\SqlParser\Statement;
  */
 class WithStatement extends Statement
 {
+   
     /**
-     * Options of this statement.
-     *
-     * @var array
+     * @param Parser     $parser the instance that requests parsing
+     * @param TokensList $list   the list of tokens to be parsed
      */
-    public static $OPTIONS = array(         
-    );
+    public function parse(Parser $parser, TokensList $list)
+    {
+        ++$list->idx; // Skipping `WITH`.
+
+        /**
+         * The state of the parser.
+         *
+         * Below are the states of the parser.
+         *
+         
+         * @var int
+         */
+        $state = 0;
+
+        for (; $list->idx < $list->count; ++$list->idx) {
+           
+            $token = $list->tokens[$list->idx];
+
+            // End of statement.
+            if ($token->type === Token::TYPE_DELIMITER) {
+                break;
+            }
+
+            // Skipping whitespaces and comments.
+            if (($token->type === Token::TYPE_WHITESPACE) || ($token->type === Token::TYPE_COMMENT)) {
+                continue;
+            }
+        }
+
+        --$list->idx;
+    }
 }
